@@ -1,0 +1,15 @@
+﻿@model EShopWebApp.Models.Alert
+
+@if (!string.IsNullOrEmpty(Model.Type))
+{
+    <div class="row my-2">
+        <div class="col-md-6">
+            <div class="alert alert-@Model.Type d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill" /></svg>
+                <div>
+                    @Model.Message
+                </div>
+            </div>
+        </div>
+    </div>
+}

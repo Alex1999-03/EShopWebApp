@@ -1,0 +1,54 @@
+﻿@model IEnumerable<EShopWebApp.Models.ProductViewModel>
+@{
+    ViewData["Title"] = "Home Page";
+    var type = (string)TempData["type"]!;
+    var message = (string)TempData["message"]!;
+}
+
+@if (!string.IsNullOrEmpty(type))
+{
+    <div class="row my-2 justify-content-end">
+        <div class="col-md-6">
+            <div class="alert alert-@type d-flex align-items-center alert-dismissible fade show" role="alert">
+                <i class="fas fa-info-circle"></i>
+                <div>&emsp;@message</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row gx-4 gx-lg-5 row-cols-md-3 row-cols-xl-4 justify-content-center">
+    @foreach (var item in Model)
+    {
+
+        <div class="col mb-5">
+            <div class="card h-100">
+                <img class="card-img-top" src="@item.UrlImage" />
+                <div class="card-body p-4">
+                    <div class="text-center">
+                        <h5 class="fw-bolder">@item.Name</h5>
+                        <p>@item.Description</p>
+                        <p><small>$@item.Price</small></p>
+                    </div>
+                </div>
+                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                    <div class="text-center">
+                        @if (item.Stock > 0)
+                        {
+                            <form asp-action="Add" asp-controller="Cart" asp-route-id="@item.Id">
+                                <input type="submit" value="Add to Cart" class="btn btn-outline-dark mt-auto" />
+                            </form>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-outline-dark mt-auto" disabled>Currently unavailable</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@*@await Html.PartialAsync("../Shared/Alert", new Alert{ Type = (string)ViewData["type"]!, Message = (string)ViewData["message"]!})*@

@@ -1,0 +1,77 @@
+﻿@model EShopWebApp.Models.AddressViewModel
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+
+<div class="row justify-content-center">
+
+    <div class="col-md-4 shadow p-3 mb-5 bg-light rounded">
+        <h4>Checkout</h4>
+
+        <form asp-action="Create" asp-controller="Checkout">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="col">
+                <label asp-for="Street" class="form-label"></label>
+                <input asp-for="Street" class="form-control"/>
+                <span asp-validation-for="Street" class="text-danger"></span>
+            </div>
+            <div class="col">
+                <label asp-for="Zipcode" class="form-label"></label>
+                <input asp-for="Zipcode" class="form-control"/>
+                <span asp-validation-for="Zipcode" class="text-danger"></span>
+            </div>
+            <div class="col">
+                <label asp-for="CountryId" class="form-label"></label>
+                <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryId"></select>
+            </div>
+            <div class="col">
+                <label asp-for="StateId" class="form-label"></label>
+                <select asp-for="StateId" class="form-control" asp-items="ViewBag.StateId"></select>
+            </div>
+            <div class="row justify-content-end my-2">
+                <div class="col-auto">
+                    <input type="submit" value="Create" class="btn btn-outline-primary" />
+                    <a asp-action="Index" asp-controller="Home" class="btn btn-outline-secondary">Continue navigate</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+   <script type="text/javascript">
+       let  dropdownC = document.getElementById('CountryId')
+       let dropdownS = document.getElementById('StateId')
+
+        window.onload = () => {
+            getStates()
+        }
+
+        dropdownC.onchange = () => {
+            getStates()
+        }
+
+        let getStates = () => {
+            let id = dropdownC.value
+            dropdownS.length = 0
+
+            const url = `/Checkout/GetStatesByCountryId?id=${id}`
+            fetch(url, { method : 'GET'})
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(element => {
+                    console.log(element)
+                    let option = document.createElement('option')
+                    option.text = element.name
+                    option.value = element.id
+                    dropdownS.appendChild(option)
+                })
+            })
+            .catch(err => console.log(err))
+        }
+   </script>
+}
